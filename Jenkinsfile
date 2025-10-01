@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKERHUB_CREDENTIALS = credentials('docker-cred') 
-        IMAGE_NAME = "darekdev/php-jeckins-app"   
+        IMAGE_NAME = "dark093/php-jeckins-app"   
         BUILD_VERSION = "1.0.1"                  
     }
 
@@ -16,6 +16,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
+                sh 'docker rmi -f $IMAGE_NAME:$BUILD_VERSION || true'
                 sh 'docker build --build-arg BUILD_VERSION=$BUILD_VERSION -t $IMAGE_NAME:$BUILD_VERSION .'
             }
         }
