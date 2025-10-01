@@ -1,13 +1,13 @@
 FROM php:8.2-cli
 
 # Argumento para versión del build
-ARG BUILD_VERSION
-ENV BUILD_VERSION=$BUILD_VERSION
+ARG BUILD_VERSION=latest
+ENV BUILD_VERSION=${BUILD_VERSION}
 
 # Copiar solo el contenido necesario
-COPY src/ /var/www/html/
+WORKDIR /var/www/html
+COPY src/ .
 
-# Servidor embebido de PHP
-CMD ["php", "-S", "0.0.0.0:80", "-t", "/var/www/html/"]
-
+# Exponer puerto y levantar servidor embebido de PHP
 EXPOSE 80
+CMD ["php", "-S", "0.0.0.0:80", "-t", "/var/www/html/"]
