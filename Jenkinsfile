@@ -3,7 +3,8 @@ pipeline {
 
     environment {
         DOCKERHUB_CREDENTIALS = credentials('docker-cred') 
-        IMAGE_NAME = "DaR3kDev/php-simple-app"
+        IMAGE_NAME = "darekdev/php-simple-app"   
+        BUILD_VERSION = "1.0.1"                  
     }
 
     stages {
