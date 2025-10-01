@@ -1,54 +1,47 @@
 pipeline {
     agent any
-    options {
-        timeout(time: 30, unit: 'MINUTES')
+
+    environment {
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-cred') 
+        IMAGE_NAME = "DaR3kDev/php-jeckins-app"
     }
 
     stages {
-        stage('Clonar código') {
+        stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/DaR3kDev/jenkins-proyect.git'
-                echo '📥 Código clonado desde GitHub'
+                git branch: 'main', url: 'https://github.com/DaR3kDev/php-jeckins-app.git'
             }
         }
 
-        stage('Verificar archivos') {
+        stage('Build Docker Image') {
             steps {
-                sh '''
-                    echo "=== Archivos en el repositorio ==="
-                    ls -la
-                    echo "=== Contenido de app/index.php ==="
-                    cat app/index.php || echo "⚠️ index.php no encontrado"
-                '''
+                sh 'docker build -t $IMAGE_NAME:latest .'
             }
         }
 
-        stage('Construir imagen Docker') {
+        stage('Login to DockerHub') {
             steps {
-                sh '''
-                    echo "🐳 Construyendo imagen Docker"
-                    docker build -t php-app-image:latest ./app
-                '''
+                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
             }
         }
 
-        stage('Desplegar contenedor') {
+        stage('Push to DockerHub') {
             steps {
-                sh '''
-                    echo "🗑️ Eliminando contenedor previo"
-                    docker rm -f php-app-container || true
-
-                    echo "🚀 Iniciando nuevo contenedor"
-                    docker run -d --name php-app-container -p 8081:80 php-app-image:latest
-                '''
+                sh 'docker push $IMAGE_NAME:latest'
             }
         }
+    }
 
-        stage('Finalizar') {
-            steps {
-                echo '✅ Pipeline completado exitosamente'
-                echo '🌐 Accede a tu aplicación en: http://localhost:8081'
-            }
+    post {
+        always {
+            echo "=== Limpieza final ==="
+            sh 'docker system prune -f || true'
+        }
+        success {
+            echo "Pipeline completado con éxito"
+        }
+        failure {
+            echo "Pipeline falló"
         }
     }
 }
