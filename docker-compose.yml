@@ -1,12 +1,9 @@
-# docker-compose.yml
-version: '3.8'
-
 services:
   jenkins:
     image: jenkins/jenkins:lts-jdk11
     container_name: jenkins
-    privileged: true
     user: root
+    privileged: true
     ports:
       - "8080:8080"
       - "50000:50000"
