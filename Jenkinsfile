@@ -37,8 +37,12 @@ pipeline {
 
     post {
         always {
-            echo "=== Limpieza final ==="
-            sh 'docker system prune -f || true'
+            script {
+                node {
+                    echo "=== Limpieza final ==="
+                    sh 'docker system prune -f || true'
+                }
+            }
         }
         success {
             echo "✅ Pipeline completado con éxito"
