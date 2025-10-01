@@ -3,14 +3,14 @@ pipeline {
 
     environment {
         DOCKERHUB_CREDENTIALS = credentials('docker-cred') 
-        IMAGE_NAME = "darekdev/php-simple-app"   
+        IMAGE_NAME = "darekdev/php-jeckins-app"   
         BUILD_VERSION = "1.0.1"                  
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/DaR3kDev/jenkins-proyect.git'
+                git branch: 'main', url: 'https://github.com/DaR3kDev/php-jeckins-app.git'
             }
         }
 
