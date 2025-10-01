@@ -1,8 +1,6 @@
-version: "3.8"
-
 services:
   jenkins:
-    build: ./jenkins   
+    image: jenkins/jenkins:lts-jdk11
     container_name: jenkins
     user: root
     privileged: true

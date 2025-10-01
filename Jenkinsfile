@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_CREDENTIALS = credentials('docker-creds') 
+        DOCKERHUB_CREDENTIALS = credentials('docker-hub-creds1') // ID de credenciales en Jenkins
         IMAGE_NAME = "dark093/php-jeckins-app"
         BUILD_VERSION = "1.0.${env.BUILD_ID}"
     }
@@ -37,12 +37,8 @@ pipeline {
 
     post {
         always {
-            script {
-                node {
-                    echo "=== Limpieza final ==="
-                    sh 'docker system prune -f || true'
-                }
-            }
+            echo "=== Limpieza final ==="
+            sh 'docker system prune -f || true'
         }
         success {
             echo "✅ Pipeline completado con éxito"
