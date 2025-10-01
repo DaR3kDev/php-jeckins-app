@@ -1,11 +1,7 @@
-version: "3.8"
-
 services:
   jenkins:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: jenkins-server
+    image: jenkins/jenkins:lts-jdk11
+    container_name: jenkins
     user: root
     privileged: true
     ports:
@@ -13,7 +9,7 @@ services:
       - "50000:50000"
     volumes:
       - jenkins_data:/var/jenkins_home
-      - /var/run/docker.sock:/var/run/docker.sock  
+      - /var/run/docker.sock:/var/run/docker.sock
     environment:
       - DOCKER_HOST=unix:///var/run/docker.sock
     restart: unless-stopped

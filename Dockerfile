@@ -1,15 +1,13 @@
-FROM jenkins/jenkins:lts-jdk11
+FROM php:8.2-cli
 
-USER root
+# Argumento para versión del build
+ARG BUILD_VERSION
+ENV BUILD_VERSION=$BUILD_VERSION
 
-# Instalar dependencias mínimas
-RUN apt-get update && \
-    apt-get install -y docker.io docker-compose && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+# Copiar solo el contenido necesario
+COPY src/ /var/www/html/
 
-# Copiar script Groovy para crear usuario admin automáticamente
-COPY default-user.groovy /usr/share/jenkins/ref/init.groovy.d/
+# Servidor embebido de PHP
+CMD ["php", "-S", "0.0.0.0:80", "-t", "/var/www/html/"]
 
-# Volver al usuario jenkins
-USER jenkins
+EXPOSE 80

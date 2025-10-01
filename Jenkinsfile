@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_CREDENTIALS = credentials('docker-cred') 
+        DOCKERHUB_CREDENTIALS = credentials('docker-creds') 
         IMAGE_NAME = "dark093/php-jeckins-app"
         BUILD_VERSION = "1.0.${env.BUILD_ID}"
     }
